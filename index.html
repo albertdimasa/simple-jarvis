@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: peachpuff;
+    }
+    .play {
+      text-align: center;
+      width: 100%;
+    }
+    .tombol {
+      padding: 10px 15px;
+      margin: 0 10px;
+      border-radius: 10px;
+      border: 0;
+      background-color: rgb(72, 44, 252);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.5s;
+      font-size: 16px;
+    }
+    .tombol:hover {
+      font-size: 18px;
+      background-color: rgb(92, 67, 250);
+    }
+    #console {
+      font-size: 40px;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+  </style>
+  <body>
+    <div id="console">Selamat datang di aplikasi coba coba uhuy</div>
+    <div class="play">
+      <button class="tombol" id="speak" onclick="JARVIS_START()">
+        Mari Bicara
+      </button>
+      <button class="tombol" id="berhenti" onclick="STOP_JARVIS()">
+        Berhenti Aja
+      </button>
+    </div>
+
+    <script src="artyom.window.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      const jarvis = new Artyom();
+
+      jarvis.addCommands([
+        {
+          indexes: ["halo", "hai", "haha"],
+          action: function (i) {
+            if (i == 0) {
+              jarvis.say("Selamat datang di aplikasi coba coba uhuy!!");
+            } else if (i == 1) {
+              jarvis.say("Hai juga! Tetap berputus asa, jangan semangat");
+            } else if (i == 2) {
+              jarvis.say("Ingat Skripsimu!");
+            }
+          },
+        },
+        {
+          smart: true,
+          indexes: ["Ulangi *"],
+          action: function (i, wildcard) {
+            jarvis.say("Kamu barusan bilang " + wildcard);
+          },
+        },
+      ]);
+      function JARVIS_START() {
+        jarvis
+          .initialize({
+            lang: "id-ID",
+            continuous: true,
+            soundex: true,
+            debug: true,
+            listen: true,
+          })
+          .then(() => {
+            console.log("Jarvis Initialize");
+            $("#console").empty();
+            $("#console").append(
+              "Silahkan ngomong sesuatu nanti bakal muncul kok!"
+            );
+          })
+          .catch((err) => {
+            console.log(err);
+            $("#console").append("Error sayang!");
+          });
+      }
+
+      function STOP_JARVIS() {
+        jarvis.fatality().then(() => {
+          $("#console").empty();
+          $("#console").append(
+            "Aplikasi Berhenti. Silahkan Pencet Tombol Disamping Jika mo ngomong lagi!"
+          );
+        });
+      }
+    </script>
+  </body>
+</html>
